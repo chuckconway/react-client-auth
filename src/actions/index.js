@@ -14,23 +14,27 @@ export function signinUser({email, password}){
 
         //update the state to indicate the user is authenticated
         dispatch({type:AUTH_USER});
-
         localStorage.setItem('token', res.data.token);
-
-
         browserHistory.push('/feature');
       })
       .catch(()=>{
           //dispatch({type:UNAUTH_USER});
           dispatch(authError('bad login info'));
       });
+  }
+}
 
-
-      //if request is good.
-
-
-
-      //if request is bad.
+export function signupUser({email, password}){
+  return function(dispatch){
+    axios.post(`${ROOT_URL}/signup`, {email, password})
+    .then((res)=> {
+      dispatch({type:AUTH_USER});
+      localStorage.setItem('token', res.data.token);
+      browserHistory.push('/feature');
+    })
+    .catch((res)=> {
+      dispatch(authError(res.data.error));
+    })
   }
 }
 
